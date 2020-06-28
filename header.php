@@ -8,10 +8,16 @@
       <meta name="google-site-verification" content="Ts-mhqfK6lCO3Uf3l0sUPcSjUb_k9uA3uMwUvNdWCck" data-react-helmet="true">
       <meta name="google-site-verification" content="My7PemNYk5gKXBvX0xs49l59FgYG5TFAzXTrQUCEntI" data-react-helmet="true">
       <link rel="profile" href="https://wolfactive.net/">
-      <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
+      <link rel="preconnect" href="https://www.googletagmanager.com">
+      <link rel="preconnect" href="https://pagead2.googlesyndication.com">
       <link rel="preload" href="<?php echo get_theme_file_uri('dist/css/webfonts/fa-brands-400.woff2') ?>" as="font" type="font/woff2" crossorigin>
       <link rel="preload" href="<?php echo get_theme_file_uri('dist/css/webfonts/fa-regular-400.woff2') ?>" as="font" type="font/woff2" crossorigin>
       <link rel="preload" href="<?php echo get_theme_file_uri('dist/css/webfonts/fa-solid-900.woff2') ?>" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="<?php echo get_theme_file_uri('dist/fonts/BalooThambi2-Bold.ttf') ?>" as="font" type="font/ttf" crossorigin>
+      <link rel="preload" href="<?php echo get_theme_file_uri('dist/fonts/BalooThambi2-Medium.ttf') ?>" as="font" type="font/ttf" crossorigin>
+      <link rel="preload" href="<?php echo get_theme_file_uri('dist/fonts/BalooThambi2-Regular.ttf') ?>" as="font" type="font/ttf" crossorigin>
+      <link rel="preload" href="<?php echo get_theme_file_uri('dist/fonts/DancingScript.ttf') ?>" as="font" type="font/ttf" crossorigin>
+      <link rel="preload" href="<?php echo get_theme_file_uri('dist/fonts/Lora.ttf') ?>" as="font" type="font/ttf" crossorigin>
       <link rel="stylesheet" href="<?php echo get_theme_file_uri('dist/css/main.css') ?>">     
       <script defer type='text/javascript' src="<?php echo get_theme_file_uri('dist/js/root.js') ?>"></script>
       <?php wp_head(); ?>
