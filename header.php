@@ -25,7 +25,6 @@
 <body <?php body_class(); ?>>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async defer src="https://www.googletagmanager.com/gtag/js?id=UA-162705121-1"></script>
-<script async defer data-ad-client="ca-pub-3930910820703913" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <?php get_template_part('sections/sidebar-mb'); ?>
 <header class="header">
    <div class="main--background">
@@ -36,7 +35,7 @@
                $custom_logo_id = get_theme_mod( 'custom_logo' );
                $image = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                   ?>
-            <img src="<?php echo $image[0]; ?>" alt="logo-nha-pho-sai-gon">
+            <img src="<?php echo $image[0]; ?>" alt="logo-wolfactive">
             </a>
          </div>
          <?php if(!wp_is_mobile()): ?>
