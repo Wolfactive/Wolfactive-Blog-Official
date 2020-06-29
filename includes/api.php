@@ -62,10 +62,43 @@ function prefix_blogApiQuery( $offset,$category) {
     };
     else:
       if($offset === 0):
-       return new WP_Error( 'rest_not_found', esc_html__( 'Hiện đang cập nhật bài viết cho mục này', 'wolfactive' ), array( 'status' => 200 ) );
+        return new WP_Error( 'rest_not_found', esc_html__( 'Hiện đang cập nhật bài viết cho mục này', 'wolfactive' ), array( 'status' => 200 ) );
       elseif($offset > 0):
       return new WP_Error( 'rest_empty_found', esc_html__( '', 'wolfactive' ), array( 'status' => 200 ) );
       endif;
     endif;
     return $blogResult;
 }
+/*create search api for blog*/
+add_action('rest_api_init','blogSubmitEmail');
+function blogSubmitEmail(){
+  register_rest_route('blog-api/v1','/submit-email',array(
+    'methods'   =>  "POST",
+    'callback'  =>  'blogSubmitEmailDb',    
+  ));
+}
+function blogSubmitEmailDb( $request ) {
+    // Here we are accessing the path variable 'id' from the $request.
+    $submit = prefix_blogSubmitDB( );
+    return rest_ensure_response( $submit );
+}
+
+// A simple function that grabs a book title from our blogsby ID.
+function prefix_blogSubmitDB() {
+    $submitResult = array();    
+    $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
+    if ($contentType === "application/json") {
+      //Receive the RAW post data.
+      $content = trim(file_get_contents("php://input"));
+      $decoded = json_decode($content, true);
+      
+      // //If json_decode failed, the JSON is invalid.
+      // if(!is_array($decoded)) {
+
+      // } else {
+        
+      // }
+    }
+    return $submitResult;
+}
+

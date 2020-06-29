@@ -11,8 +11,7 @@ define('THEME_URL', get_stylesheet_directory_uri());
 
 $file_includes = [
     'includes/theme-setup.php',                         // General theme setting
-    'includes/acf-options.php',                         // ACF Option page
-    'includes/resize.php',
+    'includes/acf-options.php',                         // ACF Option page    
     'includes/customize.php',
     'includes/api.php',
 ];
@@ -46,53 +45,9 @@ function settup_theme(){
 	   $html = preg_replace( '/(width|height)="\d*"\s/', "", $html );
 	   return $html;
 	}
-	function teaser($limit) {
-		$excerpt = explode(' ', get_the_excerpt(), $limit);
-		if (count($excerpt)>=$limit) {
-			array_pop($excerpt);
-			$excerpt = implode(" ",$excerpt).'[...]';
-		} else {
-			$excerpt = implode(" ",$excerpt);
-		}
-		$excerpt = preg_replace('`\[[^\]]*\]`','',$excerpt);
-		return $excerpt.'...';
-	}
-	function setpostview($postID){
-	    $count_key ='views';
-	    $count = get_post_meta($postID, $count_key, true);
-	    if($count == ''){
-	        $count = 0;
-	        delete_post_meta($postID, $count_key);
-	        add_post_meta($postID, $count_key, '0');
-	    } else {
-	        $count++;
-	        update_post_meta($postID, $count_key, $count);
-	    }
-	}
-	function getpostviews($postID){
-	    $count_key ='views';
-	    $count = get_post_meta($postID, $count_key, true);
-	    if($count == ''){
-	        delete_post_meta($postID, $count_key);
-	        add_post_meta($postID, $count_key, '0');
-	        return "0";
-	    }
-	    return $count;
-	}
-	function wpc_unset_imagesizes($sizes){
-	    unset( $sizes['medium']);
-	    unset( $sizes['medium_large']);
-	    unset( $sizes['large']);
-	}
-	add_filter('intermediate_image_sizes_advanced', 'wpc_unset_imagesizes');
-	add_filter('max_srcset_image_width', 'hk_return');
-	function hk_return(){
-		return 1;
-	}
 }
 add_action('init','settup_theme');
 add_filter('jpeg_quality', function($arg){return 70;});
-add_filter('png_quality', function($arg){return 70;});
 add_image_size('new-img',300, 300 ,TRUE);
 add_theme_support( 'custom-logo', array(
   	'height'      => 100,
@@ -101,35 +56,21 @@ add_theme_support( 'custom-logo', array(
   	'flex-width'  => true,
   	'header-text' => array( 'site-title', 'site-description' ),
   ) );
-  // Setting hình crop hình đại diện
-  function hk_get_thumb($id, $w, $h){
-    if(get_post_thumbnail_id($id)){
-      $url = wp_get_attachment_url( get_post_thumbnail_id($id));
-    } else {
-      $url = get_bloginfo('template_directory').'/no-thumb.jpg';
-    }
-    $image = huykira_image_resize($url, $w, $h, true, false);
-    return $image['url'];
-  }
-  function hk_get_image($url, $w, $h){
-    $image = huykira_image_resize($url, $w, $h, true, false);
-    return $image['url'];
-  }
 /* ------------------------------------ */
 function theme_products(){
     $label = array(
         'name' => 'Blogs',
         'singular_name' => 'Blogs' ,
-		'add_new'               => __( 'Thêm blog', 'textdomain' ),
-        'add_new_item'          => __( 'Tên blog', 'textdomain' ),
-        'new_item'              => __( 'Blog mới', 'textdomain' ),
-        'edit_item'             => __( 'Chỉnh sửa blog', 'textdomain' ),
-        'view_item'             => __( 'Xem blog', 'textdomain' ),
-        'all_items'             => __( 'Tất cả blog', 'textdomain' ),
-        'search_items'          => __( 'Tìm kiếm blog', 'textdomain' ),
-		    'featured_image'        => _x( 'Hình ảnh blog', 'textdomain' ),
-        'set_featured_image'    => _x( 'Chọn hình ảnh blog', 'textdomain' ),
-        'remove_featured_image' => _x( 'Xóa hình ảnh blog', 'textdomain' ),
+		'add_new'               => __( 'Thêm blog', 'wolfactive' ),
+        'add_new_item'          => __( 'Tên blog', 'wolfactive' ),
+        'new_item'              => __( 'Blog mới', 'wolfactive' ),
+        'edit_item'             => __( 'Chỉnh sửa blog', 'wolfactive' ),
+        'view_item'             => __( 'Xem blog', 'wolfactive' ),
+        'all_items'             => __( 'Tất cả blog', 'wolfactive' ),
+        'search_items'          => __( 'Tìm kiếm blog', 'wolfactive' ),
+		    'featured_image'        => _x( 'Hình ảnh blog', 'wolfactive' ),
+        'set_featured_image'    => _x( 'Chọn hình ảnh blog', 'wolfactive' ),
+        'remove_featured_image' => _x( 'Xóa hình ảnh blog', 'wolfactive' ),
     );
     $args = array(
         'labels' => $label,
@@ -200,6 +141,53 @@ function make_taxonomy_tag() {
         register_taxonomy('tag-key', 'theme_products', $args);
 }
 add_action( 'init', 'make_taxonomy_tag', 0 );
+
+function email_data(){
+  $label = array(
+      'name' => 'Data',
+      'singular_name' => 'Data' ,
+  'add_new'               => __( 'Thêm Data', 'wolfactive' ),
+      'add_new_item'          => __( 'Tên Data', 'wolfactive' ),
+      'new_item'              => __( 'Data mới', 'wolfactive' ),
+      'edit_item'             => __( 'Chỉnh sửa Data', 'wolfactive' ),
+      'view_item'             => __( 'Xem Data', 'wolfactive' ),
+      'all_items'             => __( 'Tất cả Data', 'wolfactive' ),
+      'search_items'          => __( 'Tìm kiếm Data', 'wolfactive' ),
+      'featured_image'        => _x( 'Hình ảnh Data', 'wolfactive' ),
+      'set_featured_image'    => _x( 'Chọn hình ảnh Data', 'wolfactive' ),
+      'remove_featured_image' => _x( 'Xóa hình ảnh Data', 'wolfactive' ),
+  );
+  $args = array(
+      'labels' => $label,
+      'description' => 'Phần data submit',
+      'supports' => array(
+          'title',          
+          'custom-fields'
+      ),
+      'hierarchical' => true,
+      'order' => 'ASC',
+      'orderby' => 'date',
+      'posts_per_page' => 30,
+      'public' => false,
+      'show_ui' => true,
+      'show_in_menu' => true,
+      'show_in_nav_menus' => true,
+      'show_in_admin_bar' => true,
+      'menu_position' => 3,
+      'menu_icon'           => 'dashicons-email-alt2',
+      'can_export' => true,
+      'has_archive' => false,
+      'publicly_queryable' => true,
+      'capability_type' => 'post',
+  );
+
+  register_post_type('emailData', $args);
+
+}
+add_action('init', 'email_data');
+/* Custom admin columns for email */
+
+/* Custom admin columns for email */
   //marcus post views
   function gt_get_post_view() {
       $count = get_post_meta( get_the_ID(), 'post_views_count', true );
@@ -381,14 +369,6 @@ function atulhost_optimize_scripts() {
   wp_dequeue_style( 'wp-block-library-theme' );
 }
 add_action('wp_enqueue_scripts', 'atulhost_optimize_scripts');
-// config language
-// function get_lang(){
-//   global $wp;
-//   $url=add_query_arg( $wp->query_vars, home_url( $wp->request ));
-//   $lang=substr($url,25,2);
-//   if($lang == ""||$lang != "vi" || $lang!="ja"){$lang="en";}
-//   echo $lang;
-// }
 function disable_emojis_tinymce($plugins) {
 	if(is_array($plugins)){
 	    return array_diff( $plugins, array( 'wpemoji' ) );
@@ -452,29 +432,7 @@ add_action('do_feed_rss2_comments', 'itsme_disable_feed', 1);
 add_action('do_feed_atom_comments', 'itsme_disable_feed', 1);
 remove_action( 'wp_head', 'feed_links_extra', 3 );
 remove_action( 'wp_head', 'feed_links', 2 );
-// add link video preload head tag
-// function add_link_video_preload(){
-//     if(is_front_page()):
-//       $aboutVideo = the_field('about_video_background','option');
-//       $carouselVideo = the_field('carousel_video_background','option');
-//       if($aboutVideo):
-//        echo '<link rel="preload" href="'.$aboutVideo.'" as="video" type="video/mp4">';
-//       elseif ($carouselVideo):
-//        echo '<link rel="preload" href="'.$carouselVideo.'" as="video" type="video/mp4">';
-//       endif;
-//      elseif(is_page('about-us')) :
-//        $aboutPageVideo= the_field('carousel_video_background');
-//        if($aboutPageVideo):
-//        echo'<link rel="preload" href="'.$aboutPageVideo.'" as="video" type="video/mp4">';
-//       endif;
-//      endif;
-// }
-// chèn code vào header
 
-// add_action( 'wp_head', 'hk_addcode_header' );
-// function hk_addcode_header(){
-// 	the_field('google_analytic','option');
-// }
 add_action('admin_init', 'rw_remove_dashboard_widgets');
   function rw_remove_dashboard_widgets() {
       remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal'); // recent comments
@@ -502,19 +460,20 @@ add_action( 'wp_before_admin_bar_render', 'remove_admin_bar_links' );
 add_action( 'admin_menu', 'my_remove_menus', 999 );
 function my_remove_menus() {
    //remove_menu_page( 'upload.php');
-   remove_menu_page( 'edit-comments.php' );
-   //remove_menu_page( 'themes.php');
+  remove_menu_page( 'edit-comments.php' );
+  remove_menu_page( 'themes.php');
    //remove_menu_page( 'plugins.php');
-   //remove_menu_page( 'users.php');
-   remove_menu_page( 'tools.php');
+  remove_menu_page( 'users.php');
+  remove_menu_page( 'tools.php');
+  remove_menu_page( 'edit.php');
   remove_menu_page( 'options-general.php');
   // remove_menu_page( 'wpseo_dashboard');
   //  remove_menu_page( 'wpcf-cpt');
-   //remove_submenu_page( 'themes.php', 'theme-editor.php');
-   remove_submenu_page( 'plugins.php', 'plugin-editor.php');
+  remove_submenu_page( 'themes.php', 'theme-editor.php');
+  remove_submenu_page( 'plugins.php', 'plugin-editor.php');
 }
 add_action( 'widgets_init', 'my_unregister_widgets' );
- if( !defined('ACF_LITE') ) define('ACF_LITE',true);
+if( !defined('ACF_LITE') ) define('ACF_LITE',true);
 // inlucde ACF
 // 1. customize ACF path
 // require( 'lib/acf/acf.php' );
@@ -533,101 +492,10 @@ function my_unregister_widgets() {
     unregister_widget('WP_Nav_Menu_Widget');
 }
 function my_deregister_scripts(){
- wp_dequeue_script( 'wp-embed' );
+wp_dequeue_script( 'wp-embed' );
 }
 add_action( 'wp_footer', 'my_deregister_scripts' );
-// function is_sold_out(){
-//   $sould_out_check = get_field('product_sold_out');
-//   return $sould_out_check;
-// }
-// function is_sale_off(){
-//   $sale_off_check = get_field('product_price_sale');
-//   if($sale_off_check) :
-//     return true;
-//   else :
-//     return false;
-//   endif;
-// }
-// function is_order(){
-//   $order_check = get_field('product_price');
-//   if(!$order_check) :
-//     return true;
-//   else:
-//     return false;
-//   endif;
-// }
-// function is_new_product(){
-//   $terms_check = get_the_terms($post->ID,'khuyen-mai');
-//   $check;
-//   foreach ($terms_check as $term) {
-//     if($term->slug == "san-pham-moi"){
-//       $check = true;
-//     }
-//   }
-//   return $check;
-// }
-// function percent_sale(){
-//   if(is_sale_off()):
-//     $price_sale = get_field('product_price_sale');
-//     $price_product = get_field('product_price');
-//     $percent = 100 - ceil(($price_sale / $price_product)*100);
-//     echo $percent;
-//   endif;
-// }
-// function get_section_homepage($field_mode){
-//   $section = 'sections/'.get_theme_mod($field_mode).'';
-//   return get_template_part($section);
-// }
-// function check_slider_home_page($field_mode){
-//   $check_slider = get_theme_mod($field_mode);
-//   if($check_slider) :
-//     return true;
-//   else:
-//     return false;
-//   endif;
-// }
-// function get_term_list_check($taxonamy_slug,$name_tag){
-//       $terms = get_terms( array(
-//             'taxonomy' => $taxonamy_slug,
-//             'hide_empty' => false,
-//         ) );
-//       $countTerm =1;
-//       foreach ($terms as $term) {
-//         if($term->name != "Tất cả"){
-//           echo '<div class="filter__form-item">
-//             <input type="radio" id="'.$name_tag.''.$countTerm.'" name="'.$name_tag.'" value="'.$term->slug.'">
-//             <label class="'.$name_tag.'" for="'.$name_tag.''.$countTerm.'">'.$term->name.'</label>
-//           </div>';
-//         }
-//       $countTerm++;
-//       }
-//   }
 
-  // function convert_price($price){
-  //   $price_convert = strval($price);
-  //   $price_array = array_reverse(str_split($price_convert));
-  //   $price_array_return= array();
-  //   $count =0;
-  //   foreach ($price_array as $key) {
-  //     if(strlen($price_convert) == 6){
-  //       if($count == 2){
-  //         array_push($price_array_return,$key);
-  //         array_push($price_array_return,'.');
-  //       }
-  //     }else{
-  //       if($count == 2){
-  //         array_push($price_array_return,$key);
-  //         array_push($price_array_return,'.');
-  //         $count=0;
-  //       }else{
-  //         array_push($price_array_return,$key);
-  //         $count ++;
-  //       }
-  //     }
-  //   }
-  //   $price_convert = implode("",array_reverse($price_array_return));
-  //   return $price_convert;
-  // }
   if( !function_exists('redirect_404_to_homepage') ){
 
     add_action( 'template_redirect', 'redirect_404_to_homepage' );
@@ -659,7 +527,7 @@ function custom_login_logo() {
 	font-size: 16px;
 	}
 	.login h1 a {
-	background-image: url('.get_bloginfo('template_directory').'/assets/images/Logo.svg);
+	background-image: url('.get_bloginfo('template_directory').'/thumb.jpg);
 	background-size: cover;
 	height:250px;
 	width:80%;
@@ -733,7 +601,7 @@ $link =get_bloginfo('template_directory');
 echo '
 <h1>Chào mừng đến với Admin Dashboard của Wolfactive</h1>
 <p>
-  <img src="'.$link.'/assets/images/Logo.svg" style="max-width:100%" />
+  <img src="'.$link.'/thumb.jpg" style="max-width:100%" />
 </p>
 ';
 }
@@ -826,7 +694,7 @@ function rudr_old_term_redirect() {
 	// exit the redirect function if taxonomy slug is not in URL
 	if( strpos( $_SERVER['REQUEST_URI'], $taxonomy_slug ) === FALSE)
 		return;
- 
+
 	if( ( is_category() && $taxonomy_name=='category' ) || ( is_tag() && $taxonomy_name=='post_tag' ) || is_tax( $taxonomy_name ) ) :
 
         	wp_redirect( site_url( str_replace($taxonomy_slug, '', $_SERVER['REQUEST_URI']) ), 301 );
@@ -858,3 +726,8 @@ function na_parse_request( $query ) {
     }
 }
 add_action( 'pre_get_posts', 'na_parse_request' );
+function delete_post_type(){
+  unregister_post_type( 'posts' );
+}
+add_action('init','delete_post_type');
+  // Setting hình crop hình đại diện
