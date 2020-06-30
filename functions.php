@@ -14,6 +14,7 @@ $file_includes = [
     'includes/acf-options.php',                         // ACF Option page    
     'includes/customize.php',
     'includes/api.php',
+    'includes/send-email-notification.php',
 ];
 
 foreach ($file_includes as $file) {
@@ -142,7 +143,7 @@ function make_taxonomy_tag() {
 }
 add_action( 'init', 'make_taxonomy_tag', 0 );
 
-function email_data(){
+function submit_email(){
   $label = array(
       'name' => 'Data',
       'singular_name' => 'Data' ,
@@ -181,12 +182,33 @@ function email_data(){
       'capability_type' => 'post',
   );
 
-  register_post_type('emailData', $args);
+  register_post_type('submit_email', $args);
 
 }
-add_action('init', 'email_data');
+add_action('init', 'submit_email');
 /* Custom admin columns for email */
+/* fix menu admin for email list*/
+add_filter( 'manage_submit_email_posts_columns', 'submit_email_filter_posts_columns' );
+function submit_email_filter_posts_columns( $columns ) {
+$columns = array(
+    'cb' => $columns['cb'],
+    'title' => __( 'Name' ),
+    'email' => __('Email'),
+    'date' => __('Ngày Đăng Ký'),
+);
+return $columns;
+}
 
+add_action( 'manage_submit_email_posts_custom_column', 'submit_email_column', 10, 2);
+function submit_email_column( $column, $post_id ) {
+if('email' === $column){
+    echo get_field('email_data');
+}
+if('date' === $column){
+    the_date();
+}
+}
+/* fix menu admin for email list*/
 /* Custom admin columns for email */
   //marcus post views
   function gt_get_post_view() {
@@ -473,7 +495,7 @@ function my_remove_menus() {
   remove_submenu_page( 'plugins.php', 'plugin-editor.php');
 }
 add_action( 'widgets_init', 'my_unregister_widgets' );
-if( !defined('ACF_LITE') ) define('ACF_LITE',true);
+//if( !defined('ACF_LITE') ) define('ACF_LITE',true);
 // inlucde ACF
 // 1. customize ACF path
 // require( 'lib/acf/acf.php' );

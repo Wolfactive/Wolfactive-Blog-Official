@@ -84,21 +84,64 @@ function blogSubmitEmailDb( $request ) {
 }
 
 // A simple function that grabs a book title from our blogsby ID.
-function prefix_blogSubmitDB() {
-    $submitResult = array();    
+function prefix_blogSubmitDB() {    
     $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
     if ($contentType === "application/json") {
       //Receive the RAW post data.
       $content = trim(file_get_contents("php://input"));
-      $decoded = json_decode($content, true);
+      $decoded = json_decode($content, true);      
       
-      // //If json_decode failed, the JSON is invalid.
-      // if(!is_array($decoded)) {
-
-      // } else {
-        
-      // }
-    }
-    return $submitResult;
+      // setup default result data
+      $result = array(            
+        'status' => 0,
+        'message' => '',
+        'error'=>'',           
+    );                     
+    $checkEmailsubmit = checkEmailSubmit($decoded['email']);
+    if(!$checkEmailsubmit){
+        $subscriber_id =  wp_insert_post( 
+            array(
+                'post_type'=>'submit_email',
+                'post_title'=> explode("@",$decoded['email'])[0],
+                'post_status'=>'publish',
+            ), 
+            true
+        );
+        // add/update custom meta data
+        update_field('email_data',$decoded['email'], $subscriber_id);
+        $result['message'] = "Đăng ký thành công";
+    }else{
+        $result['message'] = "Email này đã tồn tại";
+    } 
+  }
+  // return result as json       
+  email_return_json($result);   
 }
+// Helper function to submit
+function checkEmailSubmit($email){
+  $check_submit = 0;
+  $subscriber_query = new WP_Query( 
+      array(
+          'post_type'		=>	'submit_email',
+          'posts_per_page' => 1,
+          'meta_key' => 'email_data',
+          'meta_value' => $email,
+      )
+  );  
+  // IF the subscriber exists...
+  if( $subscriber_query->have_posts() ):    
+      // get the subscriber_id
+      $subscriber_query->the_post();
+      $check_submit = get_the_ID();        
+  endif;
+  return $check_submit;
+}
+function email_return_json( $php_array ) {	
+// encode result as json string
+$json_result = json_encode( $php_array );	
+// return result
+die( $json_result );	
+// stop all other processing 
+exit;
 
+}

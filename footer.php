@@ -82,6 +82,7 @@
 	    <!----------=========Sub==========-------->
  </footer> 
  <?php get_template_part('sections/navgator');?>
+ <?php get_template_part('sections/toast');?>
  <?php wp_footer(); ?>
  </body>
 </html>
