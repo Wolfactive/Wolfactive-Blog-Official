@@ -409,18 +409,18 @@ function disable_emojis() {
     add_filter( 'tiny_mce_plugins', 'disable_emojis_tinymce' );
 }
 add_action( 'init', 'disable_emojis' );
- add_action( 'phpmailer_init', function( $phpmailer ) {
+add_action( 'phpmailer_init', function( $phpmailer ) {
     if ( !is_object( $phpmailer ) )
     $phpmailer = (object) $phpmailer;
     $phpmailer->Mailer     = 'smtp';
     $phpmailer->Host       = 'smtp.gmail.com';
     $phpmailer->SMTPAuth   = 1;
     $phpmailer->Port       = 587;
-    $phpmailer->Username   = 'Cskh.mail.wolfactive@gmail.com';
-    $phpmailer->Password   = 'Stealneaker@2020';
+    $phpmailer->Username   = 'wolfactive.sendmail@gmail.com';
+    $phpmailer->Password   = 'Wolfctive@2020@2020';
     $phpmailer->SMTPSecure = 'SSL';
-    $phpmailer->From       = 'cskh.wolfactive@gmail.com';
-    $phpmailer->FromName   = 'wolfactive';
+    $phpmailer->From       = 'info.wolfactive@gmail.com';
+    $phpmailer->FromName   = 'Wolfactive';
 });
 
 
@@ -471,7 +471,7 @@ function my_remove_menus() {
   remove_menu_page( 'users.php');
   remove_menu_page( 'tools.php');
   remove_menu_page( 'edit.php');
-  remove_menu_page( 'options-general.php');
+  //remove_menu_page( 'options-general.php');
   // remove_menu_page( 'wpseo_dashboard');
   //  remove_menu_page( 'wpcf-cpt');
   remove_submenu_page( 'themes.php', 'theme-editor.php');
