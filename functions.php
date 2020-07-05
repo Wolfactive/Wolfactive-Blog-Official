@@ -372,12 +372,17 @@ function title_check(){
   endif;
 }
 function get_term_list($term_name){
-  $terms =  get_terms([ 'taxonomy' => $term_name,'hide_empty' => false,]);
-  if ( $terms && ! is_wp_error( $terms ) ){
-    foreach ($terms as $term ) {
-      if($term->name != "Bài viết nổi bật"):
-        $slugcat = esc_html($term->slug);
-        echo '<a class="term__link" href="'.home_url().'/'.$term_name.'/'.$slugcat.'">'.esc_html($term->name).'('.$term->count.')'.'</a>';
+  $termsList =  get_terms([ 'taxonomy' => $term_name,'hide_empty' => false,]);
+  if (count($termsList) > 9){
+    $termsIndex = array_rand($termsList,9);
+  }else{
+    $termsIndex = array_rand($termsList,count($termsList));
+  }
+  if ( $termsList && ! is_wp_error( $termsList ) ){
+    foreach ($termsIndex as $termIndex ) {
+      if($termsList[$termIndex]->name != "Bài viết nổi bật"):
+        $slugcat = esc_html($termsList[$termIndex]->slug);
+        echo '<a class="term__link" href="'.home_url().'/'.$term_name.'/'.$slugcat.'">'.esc_html($termsList[$termIndex]->name).'('.$termsList[$termIndex]->count.')'.'</a>';
       endif;
     }
   }
@@ -448,6 +453,11 @@ add_action('admin_init', 'rw_remove_dashboard_widgets');
       remove_meta_box('dashboard_primary', 'dashboard', 'normal'); // wordpress blog
       remove_meta_box('dashboard_secondary', 'dashboard', 'normal'); // other wordpress news
 }
+/**
+ * remove_admin_bar_links
+ *
+ * @return void
+ */
 function remove_admin_bar_links() {
   global $wp_admin_bar;
     $wp_admin_bar->remove_menu('wp-logo');          /** Remove the WordPress logo **/
@@ -463,6 +473,11 @@ function remove_admin_bar_links() {
 }
 add_action( 'wp_before_admin_bar_render', 'remove_admin_bar_links' );
 add_action( 'admin_menu', 'my_remove_menus', 999 );
+/**
+ * my_remove_menus
+ *
+ * @return void
+ */
 function my_remove_menus() {
    //remove_menu_page( 'upload.php');
   remove_menu_page( 'edit-comments.php' );
@@ -482,6 +497,11 @@ add_action( 'widgets_init', 'my_unregister_widgets' );
 // inlucde ACF
 // 1. customize ACF path
 // require( 'lib/acf/acf.php' );
+/**
+ * my_unregister_widgets
+ *
+ * @return void
+ */
 function my_unregister_widgets() {
     unregister_widget('WP_Widget_Pages');
     unregister_widget('WP_Widget_Calendar');
@@ -496,6 +516,11 @@ function my_unregister_widgets() {
     unregister_widget('WP_Widget_Tag_Cloud');
     unregister_widget('WP_Nav_Menu_Widget');
 }
+/**
+ * my_deregister_scripts
+ *
+ * @return void
+ */
 function my_deregister_scripts(){
 wp_dequeue_script( 'wp-embed' );
 }
@@ -512,6 +537,11 @@ add_action( 'wp_footer', 'my_deregister_scripts' );
         endif;
     }
 }
+/**
+ * custom_login_logo
+ *
+ * @return void
+ */
 function custom_login_logo() {
 	echo '<style type="text/css">
 	body{
@@ -557,6 +587,11 @@ function custom_login_logo() {
 }
 add_action('login_head', 'custom_login_logo');
 
+/**
+ * change_wp_login_url
+ *
+ * @return void
+ */
 function change_wp_login_url() {
 	return "http://wolfactive.net/";
 }
@@ -574,6 +609,11 @@ remove_filter( 'authenticate', 'wp_authenticate_email_password', 20 );
 // Remove Welcome Panel
 remove_action('welcome_panel', 'wp_welcome_panel');
 
+/**
+ * remove_dashboard_widgets
+ *
+ * @return void
+ */
 function remove_dashboard_widgets() {
 
   remove_meta_box( 'dashboard_right_now', 'dashboard', 'normal' );
@@ -590,6 +630,11 @@ function remove_dashboard_widgets() {
 add_action( 'wp_dashboard_setup', 'remove_dashboard_widgets' );
 
 // Add a new widget to the dashboard using a custom function
+/**
+ * wpmudev_add_dashboard_widgets
+ *
+ * @return void
+ */
 function wpmudev_add_dashboard_widgets() {
 wp_add_dashboard_widget(
   'wpmudev_dashboard_widget', // Widget slug
@@ -601,6 +646,11 @@ wp_add_dashboard_widget(
 add_action( 'wp_dashboard_setup', 'wpmudev_add_dashboard_widgets' );
 
 // Initialize the function to output the contents of your new dashboard widget
+/**
+ * wpmudev_new_dashboard_widget_function
+ *
+ * @return void
+ */
 function wpmudev_new_dashboard_widget_function() {
 $link =get_bloginfo('template_directory');
 echo '
@@ -611,6 +661,13 @@ echo '
 ';
 }
 add_filter( 'wpseo_sitemap_post_single_change_freq', 'my_custom_post_freq', 10, 2 );
+/**
+ * my_custom_post_freq
+ *
+ * @param  mixed $default
+ * @param  mixed $url
+ * @return void
+ */
 function my_custom_post_freq( $default, $url ) {
 return hourly;
 }
@@ -618,11 +675,22 @@ remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
 add_filter('xmlrpc_enabled', '__return_false');
 remove_action( 'wp_head', 'wp_generator' );
 add_action( 'init', 'stop_heartbeat', 1 );
+/**
+ * stop_heartbeat
+ *
+ * @return void
+ */
 function stop_heartbeat() {
 wp_deregister_script('heartbeat');
 }
 add_filter('request', 'rudr_change_term_request', 1, 1 );
 
+/**
+ * rudr_change_term_request
+ *
+ * @param  mixed $query
+ * @return void
+ */
 function rudr_change_term_request($query){
 
 	$tax_name = 'cat-theme'; // specify you taxonomy name here, it can be also 'category' or 'post_tag'
@@ -677,6 +745,14 @@ function rudr_change_term_request($query){
 
 add_filter( 'term_link', 'rudr_term_permalink', 10, 3 );
 
+/**
+ * rudr_term_permalink
+ *
+ * @param  mixed $url
+ * @param  mixed $term
+ * @param  mixed $taxonomy
+ * @return void
+ */
 function rudr_term_permalink( $url, $term, $taxonomy ){
 
 	$taxonomy_name = 'cat-theme'; // your taxonomy name here
@@ -691,6 +767,11 @@ function rudr_term_permalink( $url, $term, $taxonomy ){
 }
 add_action('template_redirect', 'rudr_old_term_redirect');
 
+/**
+ * rudr_old_term_redirect
+ *
+ * @return void
+ */
 function rudr_old_term_redirect() {
 
 	$taxonomy_name = 'cat-theme';
@@ -708,6 +789,14 @@ function rudr_old_term_redirect() {
 	endif;
 
 }
+/**
+ * na_remove_slug
+ *
+ * @param  mixed $post_link
+ * @param  mixed $post
+ * @param  mixed $leavename
+ * @return void
+ */
 function na_remove_slug( $post_link, $post, $leavename ) {
 
     if ( 'theme_products' != $post->post_type || 'publish' != $post->post_status ) {
@@ -720,6 +809,12 @@ function na_remove_slug( $post_link, $post, $leavename ) {
 }
 add_filter( 'post_type_link', 'na_remove_slug', 10, 3 );
 
+/**
+ * na_parse_request
+ *
+ * @param  mixed $query
+ * @return void
+ */
 function na_parse_request( $query ) {
 
     if ( ! $query->is_main_query() || 2 != count( $query->query ) || ! isset( $query->query['page'] ) ) {
