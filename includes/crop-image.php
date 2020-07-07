@@ -113,26 +113,26 @@ function the_image_crop($url,$width,$height){
     $alt = clean_special_character_from_string($title).'-wolfactive-'.$width.'x'.$height;
     $file_path_check_crop = 'uploads/'.$name.'-wolfactive-'.$width.'x'.$height.'.'.$type;
     $file_name_path_crop = get_bloginfo('url').'/'.'uploads/'.$name.'-wolfactive-'.$width.'x'.$height.'.'.$type;
-    // $whitelist = array(
-    //     '127.0.0.1',
-    //     '::1'
-    // );    
-    // if(!in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
-    //     if (!file_exists($file_name_path_crop)) {
-    //         crop_image($url,$width,$height,'webp');
-    //     } 
-    //     $output  = '<picture>';
-    //     $output .= '<source src="'.get_bloginfo('url').'/'.'uploads/'.$name.'-'.$width.'x'.$height.'.webp" type="image/webp" >';
-    //     $output .= '<source src="'.$file_name_path_crop.'" type="image/'.$types.'" >';
-    //     $output .= '<img src="'.$file_name_path_crop.'" alt="'.$alt.'" >';
-    //     $output .= '<picture>';
-    //     echo $output;
-    // }else{
+    $whitelist = array(
+        '127.0.0.1',
+        '::1'
+    );    
+    if(!in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
+        if (!file_exists($file_path_check_crop)) {
+            crop_image($url,$width,$height,'webp');
+        } 
+        $output  = '<picture>';
+        $output .= '<source src="'.get_bloginfo('url').'/'.'uploads/'.$name.'-'.$width.'x'.$height.'.webp" type="image/webp" >';
+        $output .= '<source src="'.$file_name_path_crop.'" type="image/'.$types.'" >';
+        $output .= '<img src="'.$file_name_path_crop.'" alt="'.$alt.'" >';
+        $output .= '<picture>';
+        echo $output;
+    }else{
         if (!file_exists($file_path_check_crop)) {
             crop_image($url,$width,$height,'nomarl');
         } 
         echo '<img src="'.$file_name_path_crop.'" alt="'.$alt.'" >';
-    // }    
+    }    
 }
 
 
@@ -192,25 +192,25 @@ function the_thumbnail_crop($width,$height){
     $alt = clean_special_character_from_string($name).'-wolfactive-'.$width.'x'.$height;
     $file_path_check_crop = 'uploads/'.$name.'-wolfactive-'.$width.'x'.$height.'.'.$type;
     $file_name_path_crop = get_bloginfo('url').'/'.'uploads/'.$name.'-wolfactive-'.$width.'x'.$height.'.'.$type;
-    // $whitelist = array(
-    //     '127.0.0.1',
-    //     '::1'
-    // );    
-    // if(!in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
-    //     if (!file_exists($file_name_path_crop)) {
-    //         crop_image($url,$width,$height,'webp');
-    //     } 
-    //     $output  = '<picture>';
-    //     $output .= '<source src="'.get_bloginfo('url').'/'.'uploads/'.$name.'-wolfactive-'.$width.'x'.$height.'.webp" type="image/webp" >';
-    //     $output .= '<source src="'.$file_name_path_crop.'" type="image/'.$types.'" >';
-    //     $output .= '<img src="'.$file_name_path_crop.'" alt="'.$alt.'" >';
-    //     $output .= '<picture>';
-    //     echo $output;
-    // }else{
+    $whitelist = array(
+        '127.0.0.1',
+        '::1'
+    );    
+    if(!in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
+        if (!file_exists($file_path_check_crop)) {
+            crop_image($url,$width,$height,'webp');
+        } 
+        $output  = '<picture>';
+        $output .= '<source src="'.get_bloginfo('url').'/'.'uploads/'.$name.'-wolfactive-'.$width.'x'.$height.'.webp" type="image/webp" >';
+        $output .= '<source src="'.$file_name_path_crop.'" type="image/'.$types.'" >';
+        $output .= '<img src="'.$file_name_path_crop.'" alt="'.$alt.'" >';
+        $output .= '<picture>';
+        echo $output;
+    }else{
         if (!file_exists($file_path_check_crop)) {
             crop_image($url,$width,$height,'nomarl');
         } 
         echo '<img src="'.$file_name_path_crop.'" alt="'.$alt.'" >';
-    // }    
+    }    
 }
 
