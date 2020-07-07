@@ -13,7 +13,15 @@
          while ( have_posts() ) {
            the_post();?>
           <div class="post__item">
-           <div class="thumbnail max--height--400"><?php the_post_thumbnail('large') ?></div>
+           <div class="thumbnail max--height--400">
+           <?php 
+              if(!wp_is_mobile()){
+              the_thumbnail_crop(949,475);
+              }elseif(wp_is_mobile()){
+                the_thumbnail_crop(337.5,406);
+              }
+              ?>
+           </div>
            <div class="pad_single">
             <?php get_template_part('sections/breadcums'); ?>
             <div class="social--share">
@@ -85,7 +93,15 @@
               ?>
                 <div class="one_post_new">
                   <div class="sidebar_thumbnail">
-                  <a href=" <?php the_permalink(); ?>"><?php the_post_thumbnail('medium'); ?></a>
+                  <a href=" <?php the_permalink(); ?>">
+                  <?php 
+                    if(!wp_is_mobile()){
+                    the_thumbnail_crop(293,143);
+                    }elseif(wp_is_mobile()){
+                      the_thumbnail_crop(338,169);
+                    }
+                    ?>
+                  </a>
                   </div>
                   <div class="mc-date-sidebar">
                     <i class="far fa-calendar-alt"></i><?php echo get_the_date(); ?>

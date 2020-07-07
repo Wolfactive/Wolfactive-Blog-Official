@@ -11,9 +11,10 @@ define('THEME_URL', get_stylesheet_directory_uri());
 
 $file_includes = [
     'includes/theme-setup.php',                         // General theme setting
-    'includes/acf-options.php',                         // ACF Option page    
+    'includes/acf-options.php',
+    'includes/crop-image.php',                            
     'includes/customize.php',
-    'includes/api.php',
+    'includes/api.php',    
     'includes/send-email-notification.php',
 ];
 

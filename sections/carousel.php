@@ -9,7 +9,13 @@
         <?php while ($getposts->have_posts()) : $getposts->the_post(); ?>
           <div class="carousel__item-new d--block splide__slide">
             <div class="carousel__item-new-img">
-              <?php the_post_thumbnail( 'large', array( 'sizes' => '(max-width:1242px) 1242px, (max-width:425px) 220px, 1242px' ) ); ?>
+              <?php 
+              if(!wp_is_mobile()){
+              the_thumbnail_crop(1085,581);
+              }elseif(wp_is_mobile()){
+                the_thumbnail_crop(375,447);
+              }
+              ?>
             </div>
             <a href="<?php the_permalink() ?>" class="carousel__item-new-des d--block">
               <h3 class="title--item">
@@ -39,7 +45,13 @@
         <?php while ($getposts->have_posts()) : $getposts->the_post(); ?>
           <div class="carousel__item-popular-item row-divide">
             <div class="carousel__item-new-img col-divide-3">
-              <?php the_post_thumbnail('thumbnail') ?>
+            <?php 
+              if(!wp_is_mobile()){
+              the_thumbnail_crop(126,126);
+              }elseif(wp_is_mobile()){
+                the_thumbnail_crop(78,78);
+              }
+              ?>
             </div>
             <a href="<?php the_permalink() ?>" class="carousel__item-new-des d--block col-divide-9">
               <h3 class="title--item">

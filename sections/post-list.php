@@ -1,6 +1,7 @@
 <div class="Post__item col-divide-4 col-divide-md-6 col-divide-sm-12 my-15">
-  <a href="<?php the_permalink()?>" class="Post__item-img d--block">      
-      <?php the_post_thumbnail( 'large', array( 'sizes' => '(max-width:425px) 220px, 500px' ) ); ?>
+  <a href="<?php the_permalink()?>" class="Post__item-img d--block">         
+      <?php the_thumbnail_crop(373,235) ?>  
+      <?php //the_post_thumbnail( 'large', array( 'sizes' => '(max-width:425px) 220px, 500px' ) ); ?>
   </a>
   <div class="Post__item-content">
     <div class="date">
