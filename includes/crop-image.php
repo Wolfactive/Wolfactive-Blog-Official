@@ -50,6 +50,7 @@ function crop_image($url,$width,$height,$mode){
     }    
     $image->autoRotate();
     $image->resizeCrop($width, $height,Image::CROP_ENTROPY);
+    $image->quality(60);
     $image->format($type);   
     $image->save('uploads/'.$name.'-wolfactive-'.$width.'x'.$height.'.'.$type);
 }
